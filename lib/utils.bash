@@ -40,14 +40,7 @@ download_release() {
 	local version="$1"
 	local download_path="$2"
 	local CLI_OS="na"
-	local CLI_UNAME="na"
-	echo "ASDF INSTALL version is $1"
-	echo "ASDF download path is $2"
-	# # TODO: Adapt the release URL convention for jfrog
-	# url="$GH_REPO/archive/v${version}.tar.gz"
 
-	# echo "* Downloading $TOOL_NAME release $version..."
-	# curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
 	if [ -z "$3" ]; then
 		CLI_MAJOR_VER="$3"
 	else
@@ -111,10 +104,7 @@ download_release() {
 		FILE_NAME="jfrog"
 	fi
 
-	# curl "${curl_opts[@]}" -o "$download_path" -C - "$URL" || fail "Could not download $URL"
 	curl -XGET "$URL" -L -k -g >"$download_path/$FILE_NAME" || fail "Could not download $URL"
-	# chmod u+x $FILE_NAME
-
 }
 
 install_version() {
