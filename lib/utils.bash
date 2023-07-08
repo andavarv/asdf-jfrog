@@ -41,7 +41,8 @@ download_release() {
 	local download_path="$2"
 	local CLI_OS="na"
 	local CLI_UNAME="na"
-
+	echo "ASDF INSTALL version is $1"
+	echo "ASDF download path is $2"
 	# # TODO: Adapt the release URL convention for jfrog
 	# url="$GH_REPO/archive/v${version}.tar.gz"
 
@@ -55,7 +56,7 @@ download_release() {
 
 	if [ $3 == "v2" ]; then
 		CLI_MAJOR_VER="v2"
-		VERSION="[RELEASE]"
+		VERSION="$1"
 		echo "Downloading the latest v2 version of JFrog CLI..."
 	elif [ $3 == "v2" ]; then
 		CLI_MAJOR_VER="v2"
