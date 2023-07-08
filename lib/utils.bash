@@ -112,7 +112,7 @@ download_release() {
 	fi
 
 	# curl "${curl_opts[@]}" -o "$download_path" -C - "$URL" || fail "Could not download $URL"
-	curl -XGET "$URL" -L -k -g -o "$download_path" >$FILE_NAME || fail "Could not download $URL"
+	curl -XGET "$URL" -L -k -g -o "$download_path/" >$FILE_NAME || fail "Could not download $URL"
 	# chmod u+x $FILE_NAME
 
 }
