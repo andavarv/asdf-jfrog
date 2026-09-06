@@ -2,7 +2,7 @@
 
 # asdf-jfrog [![Build](https://github.com/andavarv/asdf-jfrog/actions/workflows/build.yml/badge.svg)](https://github.com/andavarv/asdf-jfrog/actions/workflows/build.yml) [![Lint](https://github.com/andavarv/asdf-jfrog/actions/workflows/lint.yml/badge.svg)](https://github.com/andavarv/asdf-jfrog/actions/workflows/lint.yml)
 
-[jfrog](https://github.com/andavarv/jfrog/jfrog-cli) plugin for the [asdf version manager](https://asdf-vm.com).
+[jfrog](https://github.com/jfrog/jfrog-cli) plugin for the [asdf version manager](https://asdf-vm.com).
 
 </div>
 
@@ -16,7 +16,6 @@
 # Dependencies
 
 - `bash`, `curl`: generic POSIX utilities.
-- `SOME_ENV_VAR`: set this environment variable in your shell config to load the correct version of tool x.
 
 # Install
 
