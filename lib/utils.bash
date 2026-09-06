@@ -5,7 +5,7 @@ set -euo pipefail
 # TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for jfrog.
 GH_REPO="https://github.com/jfrog/jfrog-cli"
 TOOL_NAME="jfrog"
-TOOL_TEST="jfrog --version"
+TOOL_TEST="jf --version"
 
 fail() {
 	echo -e "asdf-$TOOL_NAME: $*"
@@ -40,38 +40,31 @@ download_release() {
 	local version="$1"
 	local download_path="$2"
 	local CLI_OS="na"
+	local CLI_MAJOR_VER="v2-jf"
+	local VERSION="$version"
 
-	if [ -z "$3" ]; then
-		CLI_MAJOR_VER="$3"
-	else
-		CLI_MAJOR_VER="v1"
-	fi
+	echo "Downloading JFrog CLI version ${VERSION}..."
 
-	if [ $3 == "v2" ]; then
-		CLI_MAJOR_VER="v2"
-		VERSION="$1"
-		echo "Downloading the latest v2 version of JFrog CLI..."
-	elif [ $3 == "v2" ]; then
-		CLI_MAJOR_VER="v2"
-		VERSION=$2
-		echo "Downloading version $2 of JFrog CLI..."
-	elif [ $# -eq 0 ]; then
-		VERSION="[RELEASE]"
-		echo "Downloading the latest v1 version of JFrog CLI..."
-	else
-		VERSION=$1
-		echo "Downloading version $1 of JFrog CLI..."
-	fi
 	if $(echo "${OSTYPE}" | grep -q msys); then
 		CLI_OS="windows"
-		URL="https://releases.jfrog.io/artifactory/jfrog-cli/${CLI_MAJOR_VER}/${VERSION}/jfrog-cli-windows-amd64/jfrog.exe"
-		FILE_NAME="jfrog.exe"
+		FILE_NAME="jf.exe"
+		URL="https://releases.jfrog.io/artifactory/jfrog-cli/${CLI_MAJOR_VER}/${VERSION}/jfrog-cli-windows-amd64/${FILE_NAME}"
 	elif $(echo "${OSTYPE}" | grep -q darwin); then
 		CLI_OS="mac"
-		URL="https://releases.jfrog.io/artifactory/jfrog-cli/${CLI_MAJOR_VER}/${VERSION}/jfrog-cli-mac-386/jfrog"
-		FILE_NAME="jfrog"
+		FILE_NAME="jf"
+		MACHINE_TYPE="$(uname -m)"
+		case $MACHINE_TYPE in
+		arm64)
+			ARCH="arm64"
+			;;
+		*)
+			ARCH="386"
+			;;
+		esac
+		URL="https://releases.jfrog.io/artifactory/jfrog-cli/${CLI_MAJOR_VER}/${VERSION}/jfrog-cli-${CLI_OS}-${ARCH}/${FILE_NAME}"
 	else
 		CLI_OS="linux"
+		FILE_NAME="jf"
 		MACHINE_TYPE="$(uname -m)"
 		case $MACHINE_TYPE in
 		i386 | i486 | i586 | i686 | i786 | x86)
@@ -96,12 +89,10 @@ download_release() {
 			ARCH="ppc64le"
 			;;
 		*)
-			echo "Unknown machine type: $MACHINE_TYPE"
-			exit -1
+			fail "Unknown machine type: $MACHINE_TYPE"
 			;;
 		esac
-		URL="https://releases.jfrog.io/artifactory/jfrog-cli/${CLI_MAJOR_VER}/${VERSION}/jfrog-cli-${CLI_OS}-${ARCH}/jfrog"
-		FILE_NAME="jfrog"
+		URL="https://releases.jfrog.io/artifactory/jfrog-cli/${CLI_MAJOR_VER}/${VERSION}/jfrog-cli-${CLI_OS}-${ARCH}/${FILE_NAME}"
 	fi
 
 	curl -XGET "$URL" -L -k -g >"$download_path/$FILE_NAME" || fail "Could not download $URL"
@@ -111,7 +102,7 @@ install_version() {
 	local install_type="$1"
 	local version="$2"
 	local install_path="${3%/bin}/bin"
-	local FILE_NAME="jfrog"
+	local FILE_NAME="jf"
 
 	if [ "$install_type" != "version" ]; then
 		fail "asdf-$TOOL_NAME supports release installs only"
